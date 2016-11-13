@@ -9,9 +9,9 @@ var bufferedStdError = [];
 var filterOn = '';
 var outputPaused = false;
 
-var params = process.argv.slice(3);
+var params = process.argv.slice(2);
 
-var running = spawn(process.argv[2], params);
+var running = spawn(process.argv[1], params);
 
 
 running.stdout.setEncoding('utf8');
