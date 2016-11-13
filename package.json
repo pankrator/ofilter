@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "ofilter": "./index.js"
+    "process-filter": "./index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0"
