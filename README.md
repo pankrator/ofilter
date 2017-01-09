@@ -18,7 +18,7 @@ npm install process-filter --global
 ## Usage
 
 ```
-ofilter <your_process_runner> [anything_else_needed_to_your_process]
+ofilter <your_process_runner> [<anything_else_needed_to_your_process>]
 ```
 
 For example:
