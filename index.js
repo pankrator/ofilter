@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 'use strict';
 
 var spawn = require('child_process').spawn;
@@ -9,9 +11,10 @@ var bufferedStdError = [];
 var filterOn = '';
 var outputPaused = false;
 
-var params = process.argv.slice(2);
+var params = process.argv.slice(3);
 
-var running = spawn(process.argv[1], params);
+var running;
+running = spawn(process.argv[2], params);
 
 
 running.stdout.setEncoding('utf8');
@@ -22,9 +25,7 @@ running.stdout.on('data', (data) => {
         return;
     }
 
-    if (filter(data, filterOn)) {
-        console.log(data);
-    }
+    writeFilteredOutput(data, filterOn);
 });
 
 running.stderr.on('data', (data) => {
@@ -33,9 +34,7 @@ running.stderr.on('data', (data) => {
         return;
     }
 
-    if (filter(data, filterOn)) {
-        console.log(data);
-    }
+    writeFilteredOutput(data, filterOn);
 });
 
 running.on('close', (code) => {
@@ -47,10 +46,8 @@ readline.emitKeypressEvents(process.stdin);
 process.stdin.on('keypress', function (chunk, key) {
     if (key.sequence === '\u001b') {
         if (outputPaused) {
-            // process.stdin.pause();
             console.log('[Main] Output resumed');
             processBufferedOutput();
-            process.exit(0);
         } else {
             process.stdin.resume();
             console.log('[Main] Output paused');
@@ -74,17 +71,13 @@ input.on('line', (line) => {
 function processBufferedOutput() {
     var output = bufferedStdOutput.shift();
     while(output) {
-        if (filter(output, filterOn)) {
-            console.log(output);
-        }
+        writeFilteredOutput(output, filterOn);
         output = bufferedStdOutput.shift();
     }
 
     output = bufferedStdError.shift()
     while(output && filter(output, filterOn)) {
-        if (filter(output, filterOn)) {
-            console.err(output);
-        }
+        writeFilteredOutput(output, filterOn);
         output = bufferedStdError.shift();
     }
 }
@@ -97,4 +90,13 @@ function filter(message, filterText) {
         return true;
     }
     return false;
+}
+
+function writeFilteredOutput(message, filterText, out, filterFn) {
+    out = out || process.stdout;
+    filterFn = filterFn || filter;
+
+    if (filterFn(message, filterText)) {
+        out.write(message);
+    }
 }
