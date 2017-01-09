@@ -30,3 +30,17 @@ ofilter node index.js
 ## Hotkeys
 
 * ESC - Pauses and buffers the output. While in this mode you can change filtering message. Just type in the console what text you want to filter on and press ENTER. When you press ESC again the output will be resumed and whatever is buffered will be displayed through the filter.
+
+
+## Having issues
+
+If you experience any problems or have ideas on how to improve. Create a new issue or make a PR. I would be happy to help!
+
+## Note
+
+Keep in mind that as I am using this for my dev purposes and currently only for Node.js processes it might have problems with other processes. Create issues if you have problems and I will try to address them.
+
+## TODO
+
+* Coloring the output that matched  the filtered text.
+* Add tests
